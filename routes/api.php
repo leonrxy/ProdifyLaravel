@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\ApiAuthController;
+use App\Http\Controllers\Api\ApiDashboardController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'role:superadmin,admin,user'], function () {
+    // Routes untuk Dashboard
+    Route::get('dashboard', [ApiDashboardController::class, 'index']);
     // Routes untuk User Management
     Route::get('users', [ApiUserController::class, 'index'])->middleware('role:superadmin,admin');
     Route::get('users/{id}', [ApiUserController::class, 'show'])->middleware('role:superadmin,admin,user');
