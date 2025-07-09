@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Hash;
 
 class ApiAuthController extends Controller
 {
+    use ApiResponse;
     /**
      * Handle user login and return API token.
      */
@@ -34,10 +36,10 @@ class ApiAuthController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
 
         // Return token dan data user
-        return response()->json([
+        return $this->successResponse([
             'access_token' => $token,
             'token_type' => 'Bearer',
-        ]);
+        ], 'Login successful');
     }
 
     /**
@@ -47,8 +49,6 @@ class ApiAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json([
-            'message' => 'Berhasil logout.'
-        ]);
+        return $this->successResponse([], 'Logout successful');
     }
 }
