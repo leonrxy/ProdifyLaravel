@@ -36,6 +36,26 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
+    public function loginAjax(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+
+            return response()->json([
+                'message' => 'Login successful',
+                'redirect' => route('dashboard')
+            ], 200);
+        }
+        return response()->json(['message' => 'Email or password is incorrect.'], 401);
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();

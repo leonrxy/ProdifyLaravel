@@ -7,8 +7,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
-
 Route::get('/login', [AuthController::class, 'showLoginForm'])->middleware('guest')->name('login');
+Route::post('/login/ajax', [AuthController::class, 'loginAjax']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -20,11 +20,3 @@ Route::middleware('auth')->group(function () {
 // Forgot Password
 Route::get('password/forgot', [AuthController::class, 'showForgotPasswordForm'])
     ->name('password.forgot');
-// Route::post('password/email', [AuthController::class, 'sendForgotPasswordEmail'])
-//     ->name('password.email');
-
-// // Reset Password
-// Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])
-//     ->name('password.reset');
-// Route::post('password/reset', [AuthController::class, 'resetPassword'])
-//     ->name('password.update');

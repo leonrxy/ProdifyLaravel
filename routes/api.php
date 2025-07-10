@@ -6,6 +6,13 @@ use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
 use Illuminate\Support\Facades\Route;
 
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('/login', [ApiAuthController::class, 'login']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [ApiAuthController::class, 'logout']);
+    });
+});
+
 Route::group(['middleware' => 'role:superadmin,admin,user'], function () {
     // Routes untuk Dashboard
     Route::get('dashboard', [ApiDashboardController::class, 'index']);
@@ -22,10 +29,4 @@ Route::group(['middleware' => 'role:superadmin,admin,user'], function () {
     Route::post('products', [ApiProductController::class, 'store'])->middleware('role:superadmin,admin');
     Route::put('products/{id}', [ApiProductController::class, 'update'])->middleware('role:superadmin,admin');
     Route::delete('products/{id}', [ApiProductController::class, 'destroy'])->middleware('role:superadmin,admin');
-});
-
-Route::post('/login', [ApiAuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [ApiAuthController::class, 'logout']);
 });
