@@ -47,7 +47,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-
+            session()->flash('success', 'Login successful. Welcome back!');
             return response()->json([
                 'message' => 'Login successful',
                 'redirect' => route('dashboard')
